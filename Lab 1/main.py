@@ -34,8 +34,23 @@ def h(state: State):
 startState = State(start_state[0][0], start_state[0][1])
 print(h(startState))
 
+# ----- Stepping of the algorithm
+
+class Step:
+    def __init__(self, currentState: State, newStates: list[State]):
+        self.currentState = currentState
+        self.newStates = newStates
+
+# array containing steps
+steps = []
+
+# function to add new steps
+def AddNewStep(currentState: State, newStates: list[State]):
+    steps.append(Step(currentState, newStates))
+        
 
 
-frontier = [startState]
-explored = []
+
+# frontier = [startState]
+# explored = []
 
