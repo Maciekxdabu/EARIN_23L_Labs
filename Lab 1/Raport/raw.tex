@@ -33,8 +33,14 @@ Then depending on the algorithm next cell or cells are chosen and the algorithm 
 In our specific case i.e. \textbf{Greedy best-first} algorithm, at each step we look for the smallest result of the heuristic function adjacent to currently analyzed cell.
 So basically we look for a cell that is closest to the end position regardless of the maze layout.
 In the next step we will look again at the ones adjacent to the cell we chose before.
-The process is repeat until the end cell is reached.
-
+The process is repeat until the End cell is reached.
+\\\\
+We will be testing two different heuristic functions and analyze their results.
+We will have:
+\begin{itemize}
+    \item One that returns direct distance to the End position
+    \item One that returns the sum of distance on X-axis and distance on Y-axis
+\end{itemize}
 
 % NEW SECTION
 \section{Our program}
