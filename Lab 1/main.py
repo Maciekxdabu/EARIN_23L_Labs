@@ -1,5 +1,14 @@
 import numpy as np
 
+class State:
+    x = -1
+    y = -1
+    def __init__(self, y, x):
+        self.x = x
+        self.y = y
+    def __str__(self) -> str:
+        return f"{self.x}:{self.y}"
+
 # O - empty, X - wall, S - start, E - end
 maze = np.array([['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                  ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
@@ -13,22 +22,20 @@ maze = np.array([['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                  ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                  ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
 
-result = np.argwhere(maze == 'S')
-print(result)
+start_state = np.argwhere(maze == 'S')
+end_state = np.argwhere(maze == 'E')
+end = State(end_state[0][0], end_state[0][1])
 
-# print(maze.index('S'))
-# maze.where
-# for rows in maze:
-#     print(maze.index('S'))
+# Heuristic definition
+def h(state: State):
+    return abs(state.x - end.x) + abs(state.y - end.y)
+
+# getting the starting state
+startState = State(start_state[0][0], start_state[0][1])
+print(h(startState))
 
 
-# frontier =
-# explored = []
 
-# class State:
-#     x = -1
-#     y = -1
-#     h = 100000000
+frontier = [startState]
+explored = []
 
-# def h(s):
-#     return 5
