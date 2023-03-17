@@ -1,0 +1,46 @@
+\documentclass{article}
+
+\title{EARIN Lab 1}
+\author{Maciej Domański 303853 \\ Gabriel Skowron-Rodriguez 300364}
+
+
+\begin{document}
+\maketitle
+
+% NEW SECTION
+\section{Intro}
+
+On this first laboratory our task is to implement the 2D maze-solving algorithm \textbf{Greedy best-first}.
+Our maze will be loaded from a file and defined as:
+\begin{itemize}
+    \item[S] - Starting position
+    \item[E] - End position
+    \item[O] - Empty space
+    \item[X] - Wall
+\end{itemize}
+
+We will provide a visualization of the working algorithm and test it for two different heuristic functions to compare results.
+
+% NEW SECTION
+\section{Algorithm}
+
+Maze-solving algorithms in general are going cell by cell from starting position in a specific pattern (algorithm) in order to find their way to the end position.
+Those algorithms determine the next step using a heuristic function.
+
+Such function returns a value for each cell in the maze (usually the distance from the End position calculated in a specific way).
+Then depending on the algorithm next cell or cells are chosen and the algorithm begins anew.
+
+In our specific case i.e. \textbf{Greedy best-first} algorithm, at each step we look for the smallest result of the heuristic function adjacent to currently analyzed cell.
+So basically we look for a cell that is closest to the end position regardless of the maze layout.
+In the next step we will look again at the ones adjacent to the cell we chose before.
+The process is repeat until the end cell is reached.
+
+
+% NEW SECTION
+\section{Our program}
+
+
+% NEW SECTION
+\section{Summary}
+
+\end{document}
