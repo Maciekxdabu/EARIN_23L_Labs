@@ -27,6 +27,19 @@ maze = np.array([['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                  ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                  ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
 
+# O - empty, X - wall, S - start, E - end, P - empty_on_path
+solved_maze = np.array([['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
+                        ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+                        ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'O', 'X'],
+                        ['X', 'P', 'P', 'P', 'P', 'S', 'O', 'O', 'O', 'X'],
+                        ['X', 'P', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
+                        ['X', 'P', 'X', 'P', 'P', 'P', 'P', 'P', 'P', 'X'],
+                        ['X', 'P', 'X', 'P', 'X', 'X', 'X', 'X', 'P', 'X'],
+                        ['X', 'P', 'P', 'P', 'X', 'X', 'X', 'X', 'P', 'X'],
+                        ['X', 'X', 'X', 'X', 'E', 'P', 'P', 'P', 'P', 'X'],
+                        ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
+                        ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+
 start_state = np.argwhere(maze == 'S')
 end_state = np.argwhere(maze == 'E')
 end = State(end_state[0][0], end_state[0][1])
@@ -65,10 +78,11 @@ def AddNewStep(currentState: State, newStates: list[State]):
 # explored = []
 
 def main():
+    gui.initConsole()
     while True:
         gui.clearConsole()
         print("Maze overview:")
-        gui.printMazeWithFrame(maze)
+        gui.printMazeWithFrame(solved_maze)
         input = gui.consoleGetInt("option")
 
 
