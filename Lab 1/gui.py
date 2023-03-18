@@ -1,50 +1,39 @@
-from tkinter import *
-
-root = Tk()
-
-
-label = Label(
-    root, text="Maze solver using Greedy Best-First search algorithm!")
-label.pack()
+import os
+import numpy
 
 
-def visblock():
-    block = Label(root)
-    block.image = PhotoImage(file="images\wall.png")
-    block['image'] = block.image
-    return block
-# These act like walls
+def clearConsole():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def invisblock():
-    block = Button(root)
-    block.image = PhotoImage(file="images\empty.png")
-    block['image'] = block.image
-    return block
-# These act like empty spaces"""
+def consoleGetInt(inputName="") -> str:
+    test = None
+    while test == None:
+        inputText = "".join(["Give integer for: ", inputName, " = "])
+        given = input(inputText)
+        try:
+            test = int(given)
+        except ValueError:
+            print("INCORRECT INPUT TYPE OF:", given)
+            print("TRY AGAIN (give an integer)")
+            test = None
+    return test
 
 
-maze = [[visblock(), visblock(), visblock(), visblock()],
-        [visblock(), invisblock(), invisblock(), visblock()],
-        [invisblock(), invisblock(), visblock(), invisblock()],
-        [visblock(), invisblock(), invisblock(), invisblock()],
-        [visblock(), visblock(), visblock(), visblock()]]
-
-for i, block_row in enumerate(maze):
-    for j, block in enumerate(block_row):
-        block.grid(row=i, column=j)
+def printMaze(maze: numpy.array):
+    lines = []
+    for row in maze:
+        lines.append(' '.join(str(x) for x in row))
+    print('\n'.join(lines))
 
 
-button_1 = Button(root, text="Load file")
-button_1.pack()
+def printMazeWithFrame(maze: numpy.array):
+    # get max length of item in array
+    padding = len(max(maze.flatten(), key=len))
 
-button_2 = Button(root, text="Show solution/Hide solution")
-button_2.pack()
-
-button_3 = Button(root, text="Previous step")
-button_3.pack()
-
-button_4 = Button(root, text="Next step")
-button_4.pack()
-
-root.mainloop()
+    lines = []
+    lines.append('-'.join('-' for x in maze[0]))
+    for row in maze:
+        lines.append(' '.join(str(x).ljust(padding) for x in row))
+    lines.append('-'.join('-'*padding for x in maze[0]))
+    print('\n'.join(lines))
