@@ -2,7 +2,9 @@ import os
 import numpy
 from colorama import init as colorama_init
 from colorama import Back
+from colorama import Fore
 from colorama import Style
+import program_classes as pc
 
 
 def initConsole():
@@ -13,44 +15,61 @@ def clearConsole():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def consoleGetInt(inputName="") -> str:
+def consoleGetOptionInt() -> str:
+    inputName = "option"
     test = None
     while test == None:
+        print("0. quit program")
+        print("1. show unsolved maze")
+        print("2. show solved maze")
+        print("3. show step by step solution")
         inputText = "".join(["Give integer for: ", inputName, " = "])
         given = input(inputText)
         try:
             test = int(given)
+            if (test < 1):
+                quit()
         except ValueError:
             print("INCORRECT INPUT TYPE OF:", given)
-            print("TRY AGAIN (give an integer)")
+            print("TRY AGAIN (give an integer from 0 to 3 - inclusive)")
             test = None
     return test
 
 
-def printMaze(maze: numpy.array):
-    lines = []
-    for row in maze:
-        lines.append(' '.join(str(x) for x in row))
-    print('\n'.join(lines))
+def applySearchStepToMaze(maze: numpy.array, step: pc.step):
+    # TEMP do not overwrite the start or end of tile path
+    if (not (maze[step.evaluatedTile.y][step.evaluatedTile.x] == 'S' or maze[step.evaluatedTile.y][step.evaluatedTile.x] == 'E')):
+        maze[step.evaluatedTile.y][step.evaluatedTile.x] = 'C'
+    for newFrontier in step.newFrontierTiles:
+        # TEMP do not overwrite the start or end tile path
+        if (not (maze[newFrontier.y][newFrontier.x] == 'S' or maze[newFrontier.y][newFrontier.x] == 'E')):
+            maze[newFrontier.y][newFrontier.x] = 'F'
+    return maze
+
+
+def applyPathMarkingToMaze(maze: numpy.array, pathTile: pc.tile):
+    # TEMP do not overwrite the start or end tile path
+    if (not (maze[pathTile.y][pathTile.x] == 'S' or maze[pathTile.y][pathTile.x] == 'E')):
+        maze[pathTile.y][pathTile.x] = 'P'
+    return maze
 
 
 def printMazeWithFrame(maze: numpy.array):
     # get max length of item in array
-    padding = len(max(maze.flatten(), key=len))
-    horizontalMazeBorderLine = horizontalMazeBorder(maze, padding)
+    horizontalMazeBorderLine = horizontalMazeBorder(maze)
 
     lines = []
     lines.append(horizontalMazeBorderLine)
     for row in maze:
         lines.append(
             wrapInMazeBorder(
-                ' '.join(colorTileBack(str(x).ljust(padding)) for x in row)))
+                ''.join(colorTileBack(str(x)) for x in row)))
     lines.append(removeStyle(horizontalMazeBorderLine))
     print('\n'.join(lines))
 
 
-def horizontalMazeBorder(maze: numpy.array, padding: int):
-    return wrapInMazeBorder(colorWhiteBack('-'.join('-'*padding for x in maze[0])))
+def horizontalMazeBorder(maze: numpy.array):
+    return wrapInMazeBorder(colorWhiteBack(''.join('--' for x in maze[0])))
 
 
 def wrapInMazeBorder(s: str):
@@ -61,17 +80,21 @@ def colorGrayBack(s: str):
     return addColor(f'{Back.WHITE}', s)
 
 
+# TODO: make Start/End tiles have their background be the same as C/F/O but have their Fore be indicative of their function (start: green, end: red)
 def colorTileBack(s: str):
     if (s == 'O'):
-        return colorCyanBack(s)
+        return colorWhiteBack(s+' ')
     if (s == 'S'):
-        return colorGreenBack(s)
+        return colorGreenBack(s+' ')
     if (s == 'E'):
-        return colorRedBack(s)
+        return colorRedBack(s+' ')
+    if (s == 'C'):
+        return colorBlueBack(s+' ')
     if (s == 'P'):
-        return colorYellowBack(s)
-
-    return colorBlackBack(s)
+        return colorYellowBack(s+' ')
+    if (s == 'F'):
+        return colorCyanBack(s+' ')
+    return colorBlackBack(s+' ')
 
 
 def colorBlackBack(s: str):
@@ -80,6 +103,10 @@ def colorBlackBack(s: str):
 
 def colorWhiteBack(s: str):
     return addColor(f'{Back.WHITE}', s)
+
+
+def colorBlueBack(s: str):
+    return addColor(f'{Back.BLUE}', s)
 
 
 def colorCyanBack(s: str):
