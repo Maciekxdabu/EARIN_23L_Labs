@@ -176,7 +176,6 @@ class MazeSolver_Program:
             sleep(0.1)
 
         else:
-            # todo draw path in gui
             pathTile = self.path[self.currentPathTile]
             self.displayed_maze = gui.applyPathMarkingToMaze(
                 self.displayed_maze, pathTile)
