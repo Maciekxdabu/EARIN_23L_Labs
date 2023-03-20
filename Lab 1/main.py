@@ -2,40 +2,58 @@ from time import sleep
 import gui
 import program_classes as pc
 import numpy as np
+import constants as c
 
 
 class MazeSolver_Program:
-
     # O - empty, X - wall, S - start, E - end
-    maze = np.array([['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-                    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-                    ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'O', 'X'],
-                    ['X', 'O', 'O', 'O', 'O', 'S', 'O', 'O', 'O', 'X'],
-                    ['X', 'O', 'X', 'X', 'X', 'O', 'X', 'X', 'X', 'X'],
-                    ['X', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-                    ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'X', 'O', 'X'],
-                    ['X', 'O', 'O', 'O', 'X', 'O', 'X', 'X', 'O', 'X'],
-                    ['X', 'X', 'X', 'X', 'E', 'O', 'O', 'O', 'O', 'X'],
-                    ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-                    ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+    maze = np.array([[c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                        c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                        c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                        c.MAZE_START, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                        c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                        c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL,
+                        c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                        c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_END, c.MAZE_EMPTY_SPACE,
+                        c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                        c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL]])
 
     # temp: should be obtained by running the algorithm
     # O - empty, X - wall, S - start, E - end, P - empty_on_path
-    solved_maze = np.array([['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-                            ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-                            ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'O', 'X'],
-                            ['X', 'O', 'O', 'F', 'C', 'S', 'F', 'O', 'O', 'X'],
-                            ['X', 'O', 'X', 'X', 'X', 'P', 'X', 'X', 'X', 'X'],
-                            ['X', 'O', 'X', 'F', 'C', 'P', 'F', 'O', 'O', 'X'],
-                            ['X', 'O', 'X', 'O', 'X', 'P', 'X', 'X', 'O', 'X'],
-                            ['X', 'O', 'O', 'O', 'X', 'P', 'X', 'X', 'O', 'X'],
-                            ['X', 'X', 'X', 'X', 'E', 'P', 'F', 'O', 'O', 'X'],
-                            ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-                            ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+    solved_maze = np.array([[c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                                c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                                c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.ALG_FRONTIER, c.ALG_EXPLORED,
+                                c.MAZE_START, c.ALG_FRONTIER, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL,
+                                c.MAZE_WALL, c.ALG_PATH, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.ALG_FRONTIER, c.ALG_EXPLORED, c.ALG_PATH, c.ALG_FRONTIER,
+                                c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE,
+                                c.MAZE_WALL, c.ALG_PATH, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                                c.MAZE_WALL, c.ALG_PATH, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_END,
+                                c.ALG_PATH, c.ALG_FRONTIER, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                                c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL]])
 
     # get start and end tiles
-    start_tile_np_arr = np.argwhere(maze == 'S')
-    end_tile_np_arr = np.argwhere(maze == 'E')
+    start_tile_np_arr = np.argwhere(maze == c.MAZE_START)
+    end_tile_np_arr = np.argwhere(maze == c.MAZE_END)
     end_tile = pc.tile(end_tile_np_arr[0][0], end_tile_np_arr[0][1])
     start_tile: pc.tile = pc.tile(
         start_tile_np_arr[0][0], start_tile_np_arr[0][1])
@@ -98,16 +116,16 @@ class MazeSolver_Program:
             # collect neighbors
             neighbors: list[pc.tile] = []
             # up tile
-            if (checkedTile.x > 0 and self.maze[checkedTile.x-1][checkedTile.y] != 'X'):
+            if (checkedTile.x > 0 and self.maze[checkedTile.x-1][checkedTile.y] != c.MAZE_WALL):
                 neighbors.append(pc.tile(checkedTile.x-1, checkedTile.y))
             # down tile
-            if (checkedTile.x < self.maze.shape[1]-1 and self.maze[checkedTile.x+1][checkedTile.y] != 'X'):
+            if (checkedTile.x < self.maze.shape[1]-1 and self.maze[checkedTile.x+1][checkedTile.y] != c.MAZE_WALL):
                 neighbors.append(pc.tile(checkedTile.x+1, checkedTile.y))
             # left tile
-            if (checkedTile.y > 0 and self.maze[checkedTile.x][checkedTile.y-1] != 'X'):
+            if (checkedTile.y > 0 and self.maze[checkedTile.x][checkedTile.y-1] != c.MAZE_WALL):
                 neighbors.append(pc.tile(checkedTile.x, checkedTile.y-1))
             # right tile
-            if (checkedTile.y < self.maze.shape[0] and self.maze[checkedTile.x][checkedTile.y+1] != 'X'):
+            if (checkedTile.y < self.maze.shape[0] and self.maze[checkedTile.x][checkedTile.y+1] != c.MAZE_WALL):
                 neighbors.append(pc.tile(checkedTile.x, checkedTile.y+1))
 
             # check neighboring tiles

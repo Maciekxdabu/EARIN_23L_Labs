@@ -5,6 +5,7 @@ from colorama import Back
 from colorama import Fore
 from colorama import Style
 import program_classes as pc
+import constants as c
 
 
 def initConsole():
@@ -38,19 +39,19 @@ def consoleGetOptionInt() -> str:
 
 def applySearchStepToMaze(maze: numpy.array, step: pc.step):
     # TEMP do not overwrite the start or end of tile path
-    if (not (maze[step.evaluatedTile.y][step.evaluatedTile.x] == 'S' or maze[step.evaluatedTile.y][step.evaluatedTile.x] == 'E')):
-        maze[step.evaluatedTile.y][step.evaluatedTile.x] = 'C'
+    if (not (maze[step.evaluatedTile.y][step.evaluatedTile.x] == c.MAZE_START or maze[step.evaluatedTile.y][step.evaluatedTile.x] == c.MAZE_END)):
+        maze[step.evaluatedTile.y][step.evaluatedTile.x] = c.ALG_EXPLORED
     for newFrontier in step.newFrontierTiles:
         # TEMP do not overwrite the start or end tile path
-        if (not (maze[newFrontier.y][newFrontier.x] == 'S' or maze[newFrontier.y][newFrontier.x] == 'E')):
-            maze[newFrontier.y][newFrontier.x] = 'F'
+        if (not (maze[newFrontier.y][newFrontier.x] == c.MAZE_START or maze[newFrontier.y][newFrontier.x] == c.MAZE_END)):
+            maze[newFrontier.y][newFrontier.x] = c.ALG_FRONTIER
     return maze
 
 
 def applyPathMarkingToMaze(maze: numpy.array, pathTile: pc.tile):
     # TEMP do not overwrite the start or end tile path
-    if (not (maze[pathTile.y][pathTile.x] == 'S' or maze[pathTile.y][pathTile.x] == 'E')):
-        maze[pathTile.y][pathTile.x] = 'P'
+    if (not (maze[pathTile.y][pathTile.x] == c.MAZE_START or maze[pathTile.y][pathTile.x] == c.MAZE_END)):
+        maze[pathTile.y][pathTile.x] = c.ALG_PATH
     return maze
 
 
@@ -82,17 +83,17 @@ def colorGrayBack(s: str):
 
 # TODO: make Start/End tiles have their background be the same as C/F/O but have their Fore be indicative of their function (start: green, end: red)
 def colorTileBack(s: str):
-    if (s == 'O'):
+    if (s == c.MAZE_EMPTY_SPACE):
         return colorWhiteBack(s+' ')
-    if (s == 'S'):
+    if (s == c.MAZE_START):
         return colorGreenBack(s+' ')
-    if (s == 'E'):
+    if (s == c.MAZE_END):
         return colorRedBack(s+' ')
-    if (s == 'C'):
+    if (s == c.ALG_EXPLORED):
         return colorBlueBack(s+' ')
-    if (s == 'P'):
+    if (s == c.ALG_PATH):
         return colorYellowBack(s+' ')
-    if (s == 'F'):
+    if (s == c.ALG_FRONTIER):
         return colorCyanBack(s+' ')
     return colorBlackBack(s+' ')
 
