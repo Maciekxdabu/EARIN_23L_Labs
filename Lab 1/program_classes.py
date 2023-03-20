@@ -5,6 +5,10 @@ class tile:
     def __init__(self, y, x):
         self.x = x
         self.y = y
+    
+    # the tile is the same tile in the maze if they have the same coordinates
+    def __eq__(self, __o: object) -> bool:
+        return self.x == __o.x and self.y == __o.y
 
     def __str__(self) -> str:
         return f"{self.x}:{self.y}"

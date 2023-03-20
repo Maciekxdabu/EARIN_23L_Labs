@@ -72,13 +72,54 @@ class MazeSolver_Program:
     def AddNewPathToTile(self, tileToAdd: pc.tile):
         self.path.append(tileToAdd)
 
-    # frontier = [startState]
-    # explored = []
-
     # the algorithm
     def solveMaze(self):
         # temp (need to actually solve the maze)
         self.solved_maze = self.solved_maze
+
+        # initializing algorithm lists
+        frontier = [self.start_tile]
+        explored = []
+
+        # main algorithm loop
+        while frontier.count > 0:
+            # find the tile to check with the smallest heuristic value
+            checkedTile = min(frontier, key=self.h)
+            # check if we reached the end of the maze
+            if frontier == self.end_tile:
+                # TODO - Generate final path
+                break
+
+            # move current tile from frontier to explored
+            explored.append(checkedTile)
+            frontier.remove(checkedTile)
+
+            # collect neighbors
+            neighbors = list[pc.tile] = []
+            # up tile
+            if (checkedTile.x > 0 and self.maze[checkedTile.x-1][checkedTile.y] != 'X'):
+                neighbors.append(pc.tile(checkedTile.x-1, checkedTile.y))
+            # down tile
+            if (checkedTile.x < self.maze.shape[1]-1 and self.maze[checkedTile.x+1][checkedTile.y] != 'X'):
+                neighbors.append(pc.tile(checkedTile.x+1, checkedTile.y))
+            # left tile
+            if (checkedTile.y > 0 and self.maze[checkedTile.x][checkedTile.y-1] != 'X'):
+                neighbors.append(pc.tile(checkedTile.x, checkedTile.y-1))
+            # right tile
+            if (checkedTile.y < self.maze.shape[0] and self.maze[checkedTile.x][checkedTile.y+1] != 'X'):
+                neighbors.append(pc.tile(checkedTile.x, checkedTile.y+1))
+
+            # check neighboring tiles
+            for tile in neighbors:
+                # add tile to frontier if it was not in there already
+                if (tile not in frontier):
+                    frontier.append(tile)
+                # also move up node present in frontier if its heuristic is better than the currently checked one
+                elif (self.h(tile) < self.h(checkedTile)):
+                    frontier.remove(tile)
+                    frontier.append(tile)
+        
+        # TODO - REMOVE static code when done with algorithm
 
         # add algorithm steps (make sure to append them in real order, so they are displayed properly)
         # do not forget to add the start tile into step
