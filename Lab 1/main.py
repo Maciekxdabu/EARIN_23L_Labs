@@ -78,6 +78,7 @@ class MazeSolver_Program:
         self.solved_maze = self.solved_maze
 
         # initializing algorithm lists
+        # 'frontier' is not a "queue.priorityQueue" because priorityQueue is not iterable: so we would not be able to check if the item is already in the queue easily
         frontier = [self.start_tile]
         explored = []
 
@@ -95,7 +96,7 @@ class MazeSolver_Program:
             frontier.remove(checkedTile)
 
             # collect neighbors
-            neighbors = list[pc.tile] = []
+            neighbors: list[pc.tile] = []
             # up tile
             if (checkedTile.x > 0 and self.maze[checkedTile.x-1][checkedTile.y] != 'X'):
                 neighbors.append(pc.tile(checkedTile.x-1, checkedTile.y))
@@ -118,7 +119,7 @@ class MazeSolver_Program:
                 elif (self.h(tile) < self.h(checkedTile)):
                     frontier.remove(tile)
                     frontier.append(tile)
-        
+
         # TODO - REMOVE static code when done with algorithm
 
         # add algorithm steps (make sure to append them in real order, so they are displayed properly)
