@@ -30,8 +30,10 @@ def consoleGetOptionInt() -> str:
             test = int(given)
             if (test < 1):
                 quit()
+            if test > 3:
+                raise ValueError()
         except ValueError:
-            print("INCORRECT INPUT TYPE OF:", given)
+            print("INCORRECT INPUT:", given)
             print("TRY AGAIN (give an integer from 0 to 3 - inclusive)")
             test = None
     return test
