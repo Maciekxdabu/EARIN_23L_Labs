@@ -2,6 +2,7 @@ from time import sleep
 import gui
 import program_classes as pc
 import numpy as np
+import file_loading as fl
 import constants as c
 
 
@@ -52,12 +53,18 @@ class MazeSolver_Program:
                             [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL]])
 
     # get start and end tiles
-    start_tile_np_arr = np.argwhere(maze == c.MAZE_START)
-    end_tile_np_arr = np.argwhere(maze == c.MAZE_END)
-    end_tile = pc.tile(end_tile_np_arr[0][0], end_tile_np_arr[0][1])
-    start_tile: pc.tile = pc.tile(
-        start_tile_np_arr[0][0], start_tile_np_arr[0][1])
+    def locateStartAndEndTiles(self):
+        self.start_tile_np_arr = np.argwhere(self.maze == c.MAZE_START)
+        self.end_tile_np_arr = np.argwhere(self.maze == c.MAZE_END)
+        self.end_tile = pc.tile(
+            self.end_tile_np_arr[0][0], self.end_tile_np_arr[0][1])
+        self.start_tile: pc.tile = pc.tile(
+            self.start_tile_np_arr[0][0], self.start_tile_np_arr[0][1])
 
+    start_tile_np_arr: np.ndarray[np.intp]
+    end_tile_np_arr: np.ndarray[np.intp]
+    end_tile: pc.tile
+    start_tile: pc.tile
     # TEMP idk what this is for but ok
     # print(self.h(state=self.startState))
 
@@ -258,7 +265,8 @@ class MazeSolver_Program:
     def run(self):
         gui.initConsole()
         # TODO: load unsolved maze from file
-
+        self.maze = fl.loadMaze()
+        self.locateStartAndEndTiles()
         # TODO: solve the maze (generating steps)
         self.solveMaze()
 
