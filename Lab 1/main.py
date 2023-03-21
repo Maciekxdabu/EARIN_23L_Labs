@@ -99,13 +99,16 @@ class MazeSolver_Program:
         # 'frontier' is not a "queue.priorityQueue" because priorityQueue is not iterable: so we would not be able to check if the item is already in the queue easily
         frontier = [self.start_tile]
         explored = []
+        newFrontiers: list[pc.tile] = []
 
-        # main algorithm loop
-        while frontier.count > 0:
+        # main algorithm loop (runs as long as there are tiles to check)
+        while len(frontier) > 0:
             # find the tile to check with the smallest heuristic value
             checkedTile = min(frontier, key=self.h)
             # check if we reached the end of the maze
-            if frontier == self.end_tile:
+            if checkedTile == self.end_tile:
+                newFrontiers.clear()
+                self.AddNewStep(checkedTile, list(newFrontiers))
                 # TODO - Generate final path
                 break
 
@@ -125,84 +128,92 @@ class MazeSolver_Program:
             if (checkedTile.y > 0 and self.maze[checkedTile.x][checkedTile.y-1] != c.MAZE_WALL):
                 neighbors.append(pc.tile(checkedTile.x, checkedTile.y-1))
             # right tile
-            if (checkedTile.y < self.maze.shape[0] and self.maze[checkedTile.x][checkedTile.y+1] != c.MAZE_WALL):
+            if (checkedTile.y < self.maze.shape[0]-1 and self.maze[checkedTile.x][checkedTile.y+1] != c.MAZE_WALL):
                 neighbors.append(pc.tile(checkedTile.x, checkedTile.y+1))
+
+            newFrontiers.clear()
 
             # check neighboring tiles
             for tile in neighbors:
-                # add tile to frontier if it was not in there already
+                # add tile to frontier if it was not in there already and if it has not been explored
                 if (tile not in frontier):
-                    frontier.append(tile)
+                    if (tile not in explored):
+                        frontier.append(tile)
+                        newFrontiers.append(tile)
                 # also move up node present in frontier if its heuristic is better than the currently checked one
                 elif (self.h(tile) < self.h(checkedTile)):
                     frontier.remove(tile)
                     frontier.append(tile)
+                    newFrontiers.append(tile)
+            
+            self.AddNewStep(checkedTile, list(newFrontiers))
 
         # TODO - REMOVE static code when done with algorithm
 
-        # add algorithm steps (make sure to append them in real order, so they are displayed properly)
-        # do not forget to add the start tile into step
-        newFrontier: list[pc.tile] = []
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x+1, y=self.start_tile.y))
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x-1, y=self.start_tile.y))
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+1))
-        self.AddNewStep(self.start_tile, list(newFrontier))
+        # # add algorithm steps (make sure to append them in real order, so they are displayed properly)
+        # # do not forget to add the start tile into step
+        # newFrontier: list[pc.tile] = []
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x+1, y=self.start_tile.y))
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x-1, y=self.start_tile.y))
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+1))
+        # self.AddNewStep(self.start_tile, list(newFrontier))
 
-        newFrontier.clear()
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x-2, y=self.start_tile.y))
-        self.AddNewStep(pc.tile(x=self.start_tile.x-1,
-                        y=self.start_tile.y), list(newFrontier))
+        # newFrontier.clear()
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x-2, y=self.start_tile.y))
+        # self.AddNewStep(pc.tile(x=self.start_tile.x-1,
+        #                 y=self.start_tile.y), list(newFrontier))
 
-        newFrontier.clear()
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+2))
-        self.AddNewStep(pc.tile(x=self.start_tile.x,
-                        y=self.start_tile.y+1), list(newFrontier))
+        # newFrontier.clear()
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+2))
+        # self.AddNewStep(pc.tile(x=self.start_tile.x,
+        #                 y=self.start_tile.y+1), list(newFrontier))
 
-        newFrontier.clear()
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+3))
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x+1, y=self.start_tile.y+2))
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x-1, y=self.start_tile.y+2))
-        self.AddNewStep(pc.tile(x=self.start_tile.x,
-                        y=self.start_tile.y+2), list(newFrontier))
+        # newFrontier.clear()
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+3))
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x+1, y=self.start_tile.y+2))
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x-1, y=self.start_tile.y+2))
+        # self.AddNewStep(pc.tile(x=self.start_tile.x,
+        #                 y=self.start_tile.y+2), list(newFrontier))
 
-        newFrontier.clear()
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x-2, y=self.start_tile.y+2))
-        self.AddNewStep(pc.tile(x=self.start_tile.x-1,
-                        y=self.start_tile.y+2), list(newFrontier))
+        # newFrontier.clear()
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x-2, y=self.start_tile.y+2))
+        # self.AddNewStep(pc.tile(x=self.start_tile.x-1,
+        #                 y=self.start_tile.y+2), list(newFrontier))
 
-        newFrontier.clear()
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+4))
-        self.AddNewStep(pc.tile(x=self.start_tile.x,
-                        y=self.start_tile.y+3), list(newFrontier))
+        # newFrontier.clear()
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+4))
+        # self.AddNewStep(pc.tile(x=self.start_tile.x,
+        #                 y=self.start_tile.y+3), list(newFrontier))
 
-        newFrontier.clear()
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+5))
-        self.AddNewStep(pc.tile(x=self.start_tile.x,
-                        y=self.start_tile.y+4), list(newFrontier))
+        # newFrontier.clear()
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+5))
+        # self.AddNewStep(pc.tile(x=self.start_tile.x,
+        #                 y=self.start_tile.y+4), list(newFrontier))
 
-        newFrontier.clear()
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x-1, y=self.start_tile.y+5))
-        newFrontier.append(
-            pc.tile(x=self.start_tile.x+1, y=self.start_tile.y+5))
-        self.AddNewStep(pc.tile(x=self.start_tile.x,
-                        y=self.start_tile.y+5), list(newFrontier))
+        # newFrontier.clear()
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x-1, y=self.start_tile.y+5))
+        # newFrontier.append(
+        #     pc.tile(x=self.start_tile.x+1, y=self.start_tile.y+5))
+        # self.AddNewStep(pc.tile(x=self.start_tile.x,
+        #                 y=self.start_tile.y+5), list(newFrontier))
 
-        # do not forget to add the end tile into step
-        newFrontier.clear()
-        self.AddNewStep(pc.tile(x=self.end_tile.x,
-                        y=self.end_tile.y), list(newFrontier))
+        # # do not forget to add the end tile into step
+        # newFrontier.clear()
+        # self.AddNewStep(pc.tile(x=self.end_tile.x,
+        #                 y=self.end_tile.y), list(newFrontier))
+        
         # add path (make sure that list is ordered from start to finish for animation to be from start to finish)
         self.AddNewPathToTile(self.start_tile)
         self.AddNewPathToTile(
