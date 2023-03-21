@@ -15,7 +15,7 @@ class MazeSolver_Program:
                     [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
                         c.MAZE_START, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
                     [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
-                        c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                        c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
                     [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
                         c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
                     [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL,
@@ -119,17 +119,17 @@ class MazeSolver_Program:
             # collect neighbors
             neighbors: list[pc.tile] = []
             # up tile
-            if (checkedTile.x > 0 and self.maze[checkedTile.x-1][checkedTile.y] != c.MAZE_WALL):
-                neighbors.append(pc.tile(checkedTile.x-1, checkedTile.y))
+            if (checkedTile.x > 0 and self.maze[checkedTile.y][checkedTile.x-1] != c.MAZE_WALL):
+                neighbors.append(pc.tile(x=checkedTile.x-1, y=checkedTile.y))
             # down tile
-            if (checkedTile.x < self.maze.shape[1]-1 and self.maze[checkedTile.x+1][checkedTile.y] != c.MAZE_WALL):
-                neighbors.append(pc.tile(checkedTile.x+1, checkedTile.y))
+            if (checkedTile.x < self.maze.shape[1]-1 and self.maze[checkedTile.y][checkedTile.x+1] != c.MAZE_WALL):
+                neighbors.append(pc.tile(x=checkedTile.x+1, y=checkedTile.y))
             # left tile
-            if (checkedTile.y > 0 and self.maze[checkedTile.x][checkedTile.y-1] != c.MAZE_WALL):
-                neighbors.append(pc.tile(checkedTile.x, checkedTile.y-1))
+            if (checkedTile.y > 0 and self.maze[checkedTile.y-1][checkedTile.x] != c.MAZE_WALL):
+                neighbors.append(pc.tile(x=checkedTile.x, y=checkedTile.y-1))
             # right tile
-            if (checkedTile.y < self.maze.shape[0]-1 and self.maze[checkedTile.x][checkedTile.y+1] != c.MAZE_WALL):
-                neighbors.append(pc.tile(checkedTile.x, checkedTile.y+1))
+            if (checkedTile.y < self.maze.shape[0]-1 and self.maze[checkedTile.y+1][checkedTile.x] != c.MAZE_WALL):
+                neighbors.append(pc.tile(x=checkedTile.x, y=checkedTile.y+1))
 
             newFrontiers.clear()
 
@@ -145,7 +145,7 @@ class MazeSolver_Program:
                     frontier.remove(tile)
                     frontier.append(tile)
                     newFrontiers.append(tile)
-            
+
             self.AddNewStep(checkedTile, list(newFrontiers))
 
         # TODO - REMOVE static code when done with algorithm
@@ -213,7 +213,7 @@ class MazeSolver_Program:
         # newFrontier.clear()
         # self.AddNewStep(pc.tile(x=self.end_tile.x,
         #                 y=self.end_tile.y), list(newFrontier))
-        
+
         # add path (make sure that list is ordered from start to finish for animation to be from start to finish)
         self.AddNewPathToTile(self.start_tile)
         self.AddNewPathToTile(
