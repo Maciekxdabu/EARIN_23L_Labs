@@ -30,29 +30,9 @@ class MazeSolver_Program:
                     [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL]])
 
     # temp: should be obtained by running the algorithm
-    # O - empty, X - wall, S - start, E - end, P - empty_on_path
-    solved_maze = np.array([[c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
-                                c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
-                                c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.ALG_FRONTIER, c.ALG_EXPLORED,
-                                c.MAZE_START, c.ALG_FRONTIER, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL,
-                                c.MAZE_WALL, c.ALG_PATH, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.ALG_FRONTIER, c.ALG_EXPLORED, c.ALG_PATH, c.ALG_FRONTIER,
-                                c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE,
-                                c.MAZE_WALL, c.ALG_PATH, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
-                                c.MAZE_WALL, c.ALG_PATH, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_END,
-                                c.ALG_PATH, c.ALG_FRONTIER, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
-                                c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
-                            [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL]])
-
+    solved_maze: np.array
     # get start and end tiles
+
     def locateStartAndEndTiles(self):
         self.start_tile_np_arr = np.argwhere(self.maze == c.MAZE_START)
         self.end_tile_np_arr = np.argwhere(self.maze == c.MAZE_END)
@@ -84,6 +64,16 @@ class MazeSolver_Program:
     # current path tile (displayed by gui)
     currentPathTile: int
 
+    def prerenderSolvedMaze(self):
+        self.solved_maze = np.array(self.maze)
+        for step in self.steps:
+            self.solved_maze = gui.applySearchStepToMaze(
+                self.solved_maze, step)
+
+        for pathMarking in self.path:
+            self.solved_maze = gui.applyPathMarkingToMaze(
+                self.solved_maze, pathMarking)
+
     # the maze state which is displayed by the program
     displayed_maze: np.array
     playing_forwards: bool = False
@@ -99,9 +89,6 @@ class MazeSolver_Program:
 
     # the algorithm
     def solveMaze(self):
-        # temp (need to actually solve the maze)
-        self.solved_maze = self.solved_maze
-
         # initializing algorithm lists
         # 'frontier' is not a "queue.priorityQueue" because priorityQueue is not iterable: so we would not be able to check if the item is already in the queue easily
         frontier = [self.start_tile]
@@ -235,6 +222,7 @@ class MazeSolver_Program:
             pc.tile(x=self.start_tile.x, y=self.start_tile.y+5))
         self.AddNewPathToTile(
             pc.tile(x=self.end_tile.x, y=self.end_tile.y))
+        self.prerenderSolvedMaze()
 
     # helper functions to set the state of display
     def displayUnsolvedMaze(self):
