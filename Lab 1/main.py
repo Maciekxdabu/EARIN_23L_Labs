@@ -41,8 +41,8 @@ class MazeSolver_Program:
         self.start_tile: pc.tile = pc.tile(
             self.start_tile_np_arr[0][0], self.start_tile_np_arr[0][1])
 
-    start_tile_np_arr: np.ndarray[np.intp]
-    end_tile_np_arr: np.ndarray[np.intp]
+    #start_tile_np_arr: np.ndarray[np.intp]
+    #end_tile_np_arr: np.ndarray[np.intp]
     end_tile: pc.tile
     start_tile: pc.tile
     # TEMP idk what this is for but ok
@@ -94,6 +94,16 @@ class MazeSolver_Program:
         frontier = [self.start_tile]
         explored = []
         newFrontiers: list[pc.tile] = []
+        
+
+        # create a two-dimensional table for tiles, where each tile will store coordinates to their predecessor
+        pathsMap: list[list[pc.tile]] = []
+        # populate the paths array with elements
+        for row in self.maze:
+            tempRow = []
+            for tile in row:
+                tempRow.append(pc.tile(-1, -1))
+            pathsMap.append(tempRow)
 
         # main algorithm loop (runs as long as there are tiles to check)
         while len(frontier) > 0:
@@ -103,7 +113,19 @@ class MazeSolver_Program:
             if checkedTile == self.end_tile:
                 newFrontiers.clear()
                 self.AddNewStep(checkedTile, list(newFrontiers))
-                # TODO - Generate final path
+                # ----- Generate final path
+                # generate the final path array
+                finalPath = [self.end_tile]
+                currentTile = pathsMap[self.end_tile.y][self.end_tile.x]
+                while currentTile != self.start_tile:
+                    finalPath.append(pc.tile(currentTile.y, currentTile.x))
+                    currentTile = pathsMap[currentTile.y][currentTile.x]
+                # reverse it to get list from beginning to the end
+                finalPath.reverse()
+                for tile in finalPath:
+                    # add tile to the drawing system
+                    self.AddNewPathToTile(tile)
+                self.prerenderSolvedMaze()
                 break
 
             # move current tile from frontier to explored
@@ -134,11 +156,15 @@ class MazeSolver_Program:
                     if (tile not in explored):
                         frontier.append(tile)
                         newFrontiers.append(tile)
+                        pathsMap[tile.y][tile.x].x = checkedTile.x
+                        pathsMap[tile.y][tile.x].y = checkedTile.y
                 # also move up node present in frontier if its heuristic is better than the currently checked one
                 elif (self.h(tile) < self.h(checkedTile)):
                     frontier.remove(tile)
                     frontier.append(tile)
                     newFrontiers.append(tile)
+                    pathsMap[tile.y][tile.x].x = checkedTile.x
+                    pathsMap[tile.y][tile.x].y = checkedTile.y
 
             self.AddNewStep(checkedTile, list(newFrontiers))
 
@@ -209,20 +235,20 @@ class MazeSolver_Program:
         #                 y=self.end_tile.y), list(newFrontier))
 
         # add path (make sure that list is ordered from start to finish for animation to be from start to finish)
-        self.AddNewPathToTile(self.start_tile)
-        self.AddNewPathToTile(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+1))
-        self.AddNewPathToTile(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+2))
-        self.AddNewPathToTile(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+3))
-        self.AddNewPathToTile(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+4))
-        self.AddNewPathToTile(
-            pc.tile(x=self.start_tile.x, y=self.start_tile.y+5))
-        self.AddNewPathToTile(
-            pc.tile(x=self.end_tile.x, y=self.end_tile.y))
-        self.prerenderSolvedMaze()
+        # self.AddNewPathToTile(self.start_tile)
+        # self.AddNewPathToTile(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+1))
+        # self.AddNewPathToTile(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+2))
+        # self.AddNewPathToTile(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+3))
+        # self.AddNewPathToTile(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+4))
+        # self.AddNewPathToTile(
+        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+5))
+        # self.AddNewPathToTile(
+        #     pc.tile(x=self.end_tile.x, y=self.end_tile.y))
+        # self.prerenderSolvedMaze()
 
     # helper functions to set the state of display
     def displayUnsolvedMaze(self):
@@ -255,6 +281,7 @@ class MazeSolver_Program:
         # TODO: load unsolved maze from file
         self.maze = fl.loadMaze()
         self.locateStartAndEndTiles()
+        
         # TODO: solve the maze (generating steps)
         self.solveMaze()
 

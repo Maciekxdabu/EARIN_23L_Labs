@@ -11,7 +11,7 @@ class tile:
         return self.x == __o.x and self.y == __o.y
 
     def __str__(self) -> str:
-        return f"{self.x}:{self.y}"
+        return f"x:{self.x}-y:{self.y}"
 
 
 class step:
