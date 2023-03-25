@@ -8,9 +8,9 @@ def compare():
         # wrzucić do folderu a nie luzem
         maze_file = "maze"+x+".txt"
         maze_generator.generateMaze(maze_file)
-        p1 = main.MazeSolver_Program(
+        p1 = main.MazeSolverProgram(
             useSecondHeiristic=True, pathToMazeFile=maze_file)
-        p2 = main.MazeSolver_Program(
+        p2 = main.MazeSolverProgram(
             useSecondHeiristic=False, pathToMazeFile=maze_file)
         results1 = p1.solve(maze_file)
         results2 = p2.solve(maze_file)

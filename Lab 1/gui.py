@@ -16,6 +16,11 @@ def clearConsole():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def printSolutionMeasurements(solutionTime: float,  stepsCount: int, pathLength: int):
+    print(
+        f"Maze solved in: {(1000*solutionTime):.6f} miliseconds. It took {stepsCount} steps to find the {pathLength} tiles long path")
+
+
 def consoleGetOptionInt() -> str:
     inputName = "option"
     test = None

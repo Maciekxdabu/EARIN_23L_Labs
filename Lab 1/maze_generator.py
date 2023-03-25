@@ -20,13 +20,14 @@ def generate_maze(width, height):
     # Shuffle the list of walls
     random.shuffle(walls)
     # Create a list of sets, where each set represents a group of cells
-    sets = [{(i, j)} for i in range(height) for j in range(width) if maze[i][j] == ' ']
+    sets = [{(i, j)} for i in range(height)
+            for j in range(width) if maze[i][j] == ' ']
     # Perform Kruskal's algorithm
     for x, y, wall_type in walls:
         if wall_type == 'H':
             set1 = next((s for s in sets if (x-1, y) in s), None)
             set2 = next((s for s in sets if (x+1, y) in s), None)
-        else: # wall_type == 'V'
+        else:  # wall_type == 'V'
             set1 = next((s for s in sets if (x, y-1) in s), None)
             set2 = next((s for s in sets if (x, y+1) in s), None)
         if set1 != set2:
@@ -38,13 +39,17 @@ def generate_maze(width, height):
     quadrant_end = random.choice([(0, 0), (0, 1), (1, 0), (1, 1)])
     while quadrant_end == quadrant_start:
         quadrant_end = random.choice([(0, 0), (0, 1), (1, 0), (1, 1)])
-    
+
     # choose random odd coordinates for start and end positions in the chosen quadrants
-    start_x = random.randrange(quadrant_start[0] * width // 2 + 1, (quadrant_start[0] + 1) * width // 2, 2)
-    start_y = random.randrange(quadrant_start[1] * height // 2 + 1, (quadrant_start[1] + 1) * height // 2, 2)
-    end_x = random.randrange(quadrant_end[0] * width // 2 + 1, (quadrant_end[0] + 1) * width // 2, 2)
-    end_y = random.randrange(quadrant_end[1] * height // 2 + 1, (quadrant_end[1] + 1) * height // 2, 2)
-    
+    start_x = random.randrange(
+        quadrant_start[0] * width // 2 + 1, (quadrant_start[0] + 1) * width // 2, 2)
+    start_y = random.randrange(
+        quadrant_start[1] * height // 2 + 1, (quadrant_start[1] + 1) * height // 2, 2)
+    end_x = random.randrange(
+        quadrant_end[0] * width // 2 + 1, (quadrant_end[0] + 1) * width // 2, 2)
+    end_y = random.randrange(
+        quadrant_end[1] * height // 2 + 1, (quadrant_end[1] + 1) * height // 2, 2)
+
     # set start and end positions in maze
     maze[start_y][start_x] = "S"
     maze[end_y][end_x] = "E"

@@ -5,110 +5,107 @@ import program_classes as pc
 import numpy as np
 import mazeFileInputOutput as mfio
 import constants as c
+import time
 
 
-class MazeSolver_Program:
+class MazeSolverProgram:
 
-    mazeFilePath: str
+    __mazeFilePath: str
 
     def __init__(self, pathToMazeFile: str = None):
         if (pathToMazeFile == None):
             __location__ = os.path.realpath(os.path.join(
                 os.getcwd(), os.path.dirname(__file__)))
-            self.mazeFilePath = os.path.join(__location__, "maze.txt")
+            self.__mazeFilePath = os.path.join(__location__, "maze.txt")
+        self.__clearStepsAndPath()
+
+    def __clearStepsAndPath(self):
+        self.__path.clear()
+        self.__steps.clear()
 
         # O - empty, X - wall, S - start, E - end
-    maze = np.array([[c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+    __maze = np.array([[c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
+                       [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
                         c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                       [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
                         c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                       [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
                         c.MAZE_START, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                       [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
                         c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                       [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
                         c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL,
+                       [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL,
                         c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
+                       [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
                         c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_END, c.MAZE_EMPTY_SPACE,
+                       [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_END, c.MAZE_EMPTY_SPACE,
                         c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
+                       [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL,
                         c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
-                    [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL]])
+                       [c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL]])
 
     # temp: should be obtained by running the algorithm
-    solved_maze: np.array
+    __solved_maze: np.array
     # get start and end tiles
 
-    def locateStartAndEndTiles(self):
-        self.start_tile_np_arr = np.argwhere(self.maze == c.MAZE_START)
-        self.end_tile_np_arr = np.argwhere(self.maze == c.MAZE_END)
-        self.end_tile = pc.tile(
+    def __locateStartAndEndTiles(self):
+        self.start_tile_np_arr = np.argwhere(self.__maze == c.MAZE_START)
+        self.end_tile_np_arr = np.argwhere(self.__maze == c.MAZE_END)
+        self.__end_tile = pc.tile(
             self.end_tile_np_arr[0][0], self.end_tile_np_arr[0][1])
-        self.start_tile: pc.tile = pc.tile(
+        self.__start_tile: pc.tile = pc.tile(
             self.start_tile_np_arr[0][0], self.start_tile_np_arr[0][1])
 
     # start_tile_np_arr: np.ndarray[np.intp]
     # end_tile_np_arr: np.ndarray[np.intp]
-    end_tile: pc.tile
-    start_tile: pc.tile
+    __end_tile: pc.tile
+    __start_tile: pc.tile
     # TEMP idk what this is for but ok
     # print(self.h(state=self.startState))
 
     # Heuristic definition
 
-    def h(self, state: pc.tile):
-        return abs(state.x - self.end_tile.x) + abs(state.y - self.end_tile.y)
+    def __h1(self, state: pc.tile):
+        return abs(state.x - self.__end_tile.x) + abs(state.y - self.__end_tile.y)
 
     # ----- Stepping of the algorithm
 
     # array containing steps
-    steps: list[pc.step] = []
+    __steps: list[pc.step] = []
     # keep track which step's outcome is displayed
-    currentStep: int
+    __currentStep: int
     # array containing path
-    path: list[pc.tile] = []
+    __path: list[pc.tile] = []
     # current path tile (displayed by gui)
-    currentPathTile: int
+    __currentPathTile: int
 
-    def prerenderSolvedMaze(self):
-        self.solved_maze = np.array(self.maze)
-        for step in self.steps:
-            self.solved_maze = gui.applySearchStepToMaze(
-                self.solved_maze, step)
+    __solutionTime: float  # solution time in seconds
+    __solutionSteps: int
+    __pathLength: int
 
-        for pathMarking in self.path:
-            self.solved_maze = gui.applyPathMarkingToMaze(
-                self.solved_maze, pathMarking)
-
-    # the maze state which is displayed by the program
-    displayed_maze: np.array
-    playing_forwards: bool = False
-    drawing_path: bool = False
-
-    # function to add new steps
-    def AddNewStep(self, currentTile: pc.tile, newStates: list[pc.tile]):
-        self.steps.append(pc.step(currentTile, newStates))
-
-    # function to add new path to tile
-    def AddNewPathToTile(self, tileToAdd: pc.tile):
-        self.path.append(tileToAdd)
+    def __solveMazeWithMeasurements(self):
+        self.__clearStepsAndPath()
+        start_time = time.time()
+        self.__solveMaze()
+        end_time = time.time()
+        self.__solutionTime = end_time - start_time
+        self.__solutionSteps = len(self.__steps)
+        self.__pathLength = len(self.__path)
 
     # the algorithm
-    def solveMaze(self):
+
+    def __solveMaze(self):
         # initializing algorithm lists
         # 'frontier' is not a "queue.priorityQueue" because priorityQueue is not iterable: so we would not be able to check if the item is already in the queue easily
-        frontier = [self.start_tile]
+        frontier = [self.__start_tile]
         explored = []
         newFrontiers: list[pc.tile] = []
 
         # create a two-dimensional table for tiles, where each tile will store coordinates to their predecessor
         pathsMap: list[list[pc.tile]] = []
         # populate the paths array with elements
-        for row in self.maze:
+        for row in self.__maze:
             tempRow = []
             for tile in row:
                 tempRow.append(pc.tile(-1, -1))
@@ -117,24 +114,24 @@ class MazeSolver_Program:
         # main algorithm loop (runs as long as there are tiles to check)
         while len(frontier) > 0:
             # find the tile to check with the smallest heuristic value
-            checkedTile = min(frontier, key=self.h)
+            checkedTile = min(frontier, key=self.__h1)
             # check if we reached the end of the maze
-            if checkedTile == self.end_tile:
+            if checkedTile == self.__end_tile:
                 newFrontiers.clear()
-                self.AddNewStep(checkedTile, list(newFrontiers))
+                self.__addNewStep(checkedTile, list(newFrontiers))
                 # ----- Generate final path
                 # generate the final path array
-                finalPath = [self.end_tile]
-                currentTile = pathsMap[self.end_tile.y][self.end_tile.x]
-                while currentTile != self.start_tile:
+                finalPath = [self.__end_tile]
+                currentTile = pathsMap[self.__end_tile.y][self.__end_tile.x]
+                while currentTile != self.__start_tile:
                     finalPath.append(pc.tile(currentTile.y, currentTile.x))
                     currentTile = pathsMap[currentTile.y][currentTile.x]
                 # reverse it to get list from beginning to the end
                 finalPath.reverse()
                 for tile in finalPath:
                     # add tile to the drawing system
-                    self.AddNewPathToTile(tile)
-                self.prerenderSolvedMaze()
+                    self.__addNewPathToTile(tile)
+                self.__prerenderSolvedMaze()
                 break
 
             # move current tile from frontier to explored
@@ -144,16 +141,16 @@ class MazeSolver_Program:
             # collect neighbors
             neighbors: list[pc.tile] = []
             # up tile
-            if (checkedTile.x > 0 and self.maze[checkedTile.y][checkedTile.x-1] != c.MAZE_WALL):
+            if (checkedTile.x > 0 and self.__maze[checkedTile.y][checkedTile.x-1] != c.MAZE_WALL):
                 neighbors.append(pc.tile(x=checkedTile.x-1, y=checkedTile.y))
             # down tile
-            if (checkedTile.x < self.maze.shape[1]-1 and self.maze[checkedTile.y][checkedTile.x+1] != c.MAZE_WALL):
+            if (checkedTile.x < self.__maze.shape[1]-1 and self.__maze[checkedTile.y][checkedTile.x+1] != c.MAZE_WALL):
                 neighbors.append(pc.tile(x=checkedTile.x+1, y=checkedTile.y))
             # left tile
-            if (checkedTile.y > 0 and self.maze[checkedTile.y-1][checkedTile.x] != c.MAZE_WALL):
+            if (checkedTile.y > 0 and self.__maze[checkedTile.y-1][checkedTile.x] != c.MAZE_WALL):
                 neighbors.append(pc.tile(x=checkedTile.x, y=checkedTile.y-1))
             # right tile
-            if (checkedTile.y < self.maze.shape[0]-1 and self.maze[checkedTile.y+1][checkedTile.x] != c.MAZE_WALL):
+            if (checkedTile.y < self.__maze.shape[0]-1 and self.__maze[checkedTile.y+1][checkedTile.x] != c.MAZE_WALL):
                 neighbors.append(pc.tile(x=checkedTile.x, y=checkedTile.y+1))
 
             newFrontiers.clear()
@@ -168,162 +165,105 @@ class MazeSolver_Program:
                         pathsMap[tile.y][tile.x].x = checkedTile.x
                         pathsMap[tile.y][tile.x].y = checkedTile.y
                 # also move up node present in frontier if its heuristic is better than the currently checked one
-                elif (self.h(tile) < self.h(checkedTile)):
+                elif (self.__h1(tile) < self.__h1(checkedTile)):
                     frontier.remove(tile)
                     frontier.append(tile)
                     newFrontiers.append(tile)
                     pathsMap[tile.y][tile.x].x = checkedTile.x
                     pathsMap[tile.y][tile.x].y = checkedTile.y
 
-            self.AddNewStep(checkedTile, list(newFrontiers))
+            self.__addNewStep(checkedTile, list(newFrontiers))
 
-        # TODO - REMOVE static code when done with algorithm
+    # gui functions and data
+    def __prerenderSolvedMaze(self):
+        self.__solved_maze = np.array(self.__maze)
+        for step in self.__steps:
+            self.__solved_maze = gui.applySearchStepToMaze(
+                self.__solved_maze, step)
 
-        # # add algorithm steps (make sure to append them in real order, so they are displayed properly)
-        # # do not forget to add the start tile into step
-        # newFrontier: list[pc.tile] = []
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x+1, y=self.start_tile.y))
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x-1, y=self.start_tile.y))
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+1))
-        # self.AddNewStep(self.start_tile, list(newFrontier))
+        for pathMarking in self.__path:
+            self.__solved_maze = gui.applyPathMarkingToMaze(
+                self.__solved_maze, pathMarking)
 
-        # newFrontier.clear()
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x-2, y=self.start_tile.y))
-        # self.AddNewStep(pc.tile(x=self.start_tile.x-1,
-        #                 y=self.start_tile.y), list(newFrontier))
+    # the maze state which is displayed by the program
+    __displayed_maze: np.array
+    __playing_forwards: bool = False
+    __drawing_path: bool = False
 
-        # newFrontier.clear()
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+2))
-        # self.AddNewStep(pc.tile(x=self.start_tile.x,
-        #                 y=self.start_tile.y+1), list(newFrontier))
+    # function to add new steps
+    def __addNewStep(self, currentTile: pc.tile, newStates: list[pc.tile]):
+        self.__steps.append(pc.step(currentTile, newStates))
 
-        # newFrontier.clear()
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+3))
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x+1, y=self.start_tile.y+2))
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x-1, y=self.start_tile.y+2))
-        # self.AddNewStep(pc.tile(x=self.start_tile.x,
-        #                 y=self.start_tile.y+2), list(newFrontier))
-
-        # newFrontier.clear()
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x-2, y=self.start_tile.y+2))
-        # self.AddNewStep(pc.tile(x=self.start_tile.x-1,
-        #                 y=self.start_tile.y+2), list(newFrontier))
-
-        # newFrontier.clear()
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+4))
-        # self.AddNewStep(pc.tile(x=self.start_tile.x,
-        #                 y=self.start_tile.y+3), list(newFrontier))
-
-        # newFrontier.clear()
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+5))
-        # self.AddNewStep(pc.tile(x=self.start_tile.x,
-        #                 y=self.start_tile.y+4), list(newFrontier))
-
-        # newFrontier.clear()
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x-1, y=self.start_tile.y+5))
-        # newFrontier.append(
-        #     pc.tile(x=self.start_tile.x+1, y=self.start_tile.y+5))
-        # self.AddNewStep(pc.tile(x=self.start_tile.x,
-        #                 y=self.start_tile.y+5), list(newFrontier))
-
-        # # do not forget to add the end tile into step
-        # newFrontier.clear()
-        # self.AddNewStep(pc.tile(x=self.end_tile.x,
-        #                 y=self.end_tile.y), list(newFrontier))
-
-        # add path (make sure that list is ordered from start to finish for animation to be from start to finish)
-        # self.AddNewPathToTile(self.start_tile)
-        # self.AddNewPathToTile(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+1))
-        # self.AddNewPathToTile(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+2))
-        # self.AddNewPathToTile(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+3))
-        # self.AddNewPathToTile(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+4))
-        # self.AddNewPathToTile(
-        #     pc.tile(x=self.start_tile.x, y=self.start_tile.y+5))
-        # self.AddNewPathToTile(
-        #     pc.tile(x=self.end_tile.x, y=self.end_tile.y))
-        # self.prerenderSolvedMaze()
+    # function to add new path to tile
+    def __addNewPathToTile(self, tileToAdd: pc.tile):
+        self.__path.append(tileToAdd)
 
     # helper functions to set the state of display
-    def displayUnsolvedMaze(self):
-        self.currentStep = 0
-        self.displayed_maze = np.array(self.maze)
+    def __displayUnsolvedMaze(self):
+        self.__currentStep = 0
+        self.__displayed_maze = np.array(self.__maze)
 
-    def displaySolvedMaze(self):
-        self.currentStep = len(self.steps)
-        self.displayed_maze = np.array(self.solved_maze)
+    def __displaySolvedMaze(self):
+        self.__currentStep = len(self.__steps)
+        self.__displayed_maze = np.array(self.__solved_maze)
 
-    def calculateNextDisplayedState(self):
-        if not self.drawing_path:
-            step = self.steps[self.currentStep]
-            self.displayed_maze = gui.applySearchStepToMaze(
-                self.displayed_maze, step)
-            self.currentStep += 1
+    def __calculateNextDisplayedState(self):
+        if not self.__drawing_path:
+            step = self.__steps[self.__currentStep]
+            self.__displayed_maze = gui.applySearchStepToMaze(
+                self.__displayed_maze, step)
+            self.__currentStep += 1
             sleep(0.1)
 
         else:
-            pathTile = self.path[self.currentPathTile]
-            self.displayed_maze = gui.applyPathMarkingToMaze(
-                self.displayed_maze, pathTile)
-            self.currentPathTile += 1
+            pathTile = self.__path[self.__currentPathTile]
+            self.__displayed_maze = gui.applyPathMarkingToMaze(
+                self.__displayed_maze, pathTile)
+            self.__currentPathTile += 1
             sleep(0.05)
 
     # main function
 
     def run(self):
         gui.initConsole()
-        # TODO: load unsolved maze from file
-        self.maze = mfio.loadMaze(self.mazeFilePath)
-        self.locateStartAndEndTiles()
+        # load unsolved maze from file
+        self.__maze = mfio.loadMaze(self.__mazeFilePath)
+        self.__locateStartAndEndTiles()
 
-        # TODO: solve the maze (generating steps)
-        self.solveMaze()
+        # solve the maze (generating steps)
+        self.__solveMazeWithMeasurements()
 
         # start with showing unsolved maze
-        self.displayUnsolvedMaze()
+        self.__displayUnsolvedMaze()
 
         while True:
             gui.clearConsole()
             print("Maze overview:")
-            gui.printMazeWithFrame(self.displayed_maze)
-
-            if (not self.playing_forwards):
+            gui.printMazeWithFrame(self.__displayed_maze)
+            gui.printSolutionMeasurements(
+                self.__solutionTime, self.__solutionSteps, self.__pathLength)
+            if (not self.__playing_forwards):
                 input = gui.consoleGetOptionInt()
                 match input:
                     case 1:  # show loaded maze
-                        self.displayUnsolvedMaze()
+                        self.__displayUnsolvedMaze()
                     case 2:  # show solved maze
-                        self.displaySolvedMaze()
+                        self.__displaySolvedMaze()
                     case 3:  # show step by step solution
-                        self.displayUnsolvedMaze()
-                        self.currentPathTile = 0
-                        self.playing_forwards = True
-                        self.drawing_path = False
+                        self.__displayUnsolvedMaze()
+                        self.__currentPathTile = 0
+                        self.__playing_forwards = True
+                        self.__drawing_path = False
 
             else:
-                if (not self.drawing_path and self.currentStep >= len(self.steps)):
-                    self.drawing_path = True
-                if (self.drawing_path and self.currentPathTile >= len(self.path)):
-                    self.playing_forwards = False
-                    self.drawing_path = False
+                if (not self.__drawing_path and self.__currentStep >= len(self.__steps)):
+                    self.__drawing_path = True
+                if (self.__drawing_path and self.__currentPathTile >= len(self.__path)):
+                    self.__playing_forwards = False
+                    self.__drawing_path = False
                     continue
-                self.calculateNextDisplayedState()
+                self.__calculateNextDisplayedState()
 
 
-p = MazeSolver_Program()
+p = MazeSolverProgram()
 p.run()
