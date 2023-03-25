@@ -1,13 +1,23 @@
+import os
 from time import sleep
 import gui
 import program_classes as pc
 import numpy as np
-import file_loading as fl
+import mazeFileInputOutput as mfio
 import constants as c
 
 
 class MazeSolver_Program:
-    # O - empty, X - wall, S - start, E - end
+
+    mazeFilePath: str
+
+    def __init__(self, pathToMazeFile: str = None):
+        if (pathToMazeFile == None):
+            __location__ = os.path.realpath(os.path.join(
+                os.getcwd(), os.path.dirname(__file__)))
+            self.mazeFilePath = os.path.join(__location__, "maze.txt")
+
+        # O - empty, X - wall, S - start, E - end
     maze = np.array([[c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL, c.MAZE_WALL],
                     [c.MAZE_WALL, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE,
                         c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_EMPTY_SPACE, c.MAZE_WALL],
@@ -41,8 +51,8 @@ class MazeSolver_Program:
         self.start_tile: pc.tile = pc.tile(
             self.start_tile_np_arr[0][0], self.start_tile_np_arr[0][1])
 
-    #start_tile_np_arr: np.ndarray[np.intp]
-    #end_tile_np_arr: np.ndarray[np.intp]
+    # start_tile_np_arr: np.ndarray[np.intp]
+    # end_tile_np_arr: np.ndarray[np.intp]
     end_tile: pc.tile
     start_tile: pc.tile
     # TEMP idk what this is for but ok
@@ -94,7 +104,6 @@ class MazeSolver_Program:
         frontier = [self.start_tile]
         explored = []
         newFrontiers: list[pc.tile] = []
-        
 
         # create a two-dimensional table for tiles, where each tile will store coordinates to their predecessor
         pathsMap: list[list[pc.tile]] = []
@@ -279,9 +288,9 @@ class MazeSolver_Program:
     def run(self):
         gui.initConsole()
         # TODO: load unsolved maze from file
-        self.maze = fl.loadMaze()
+        self.maze = mfio.loadMaze(self.mazeFilePath)
         self.locateStartAndEndTiles()
-        
+
         # TODO: solve the maze (generating steps)
         self.solveMaze()
 
