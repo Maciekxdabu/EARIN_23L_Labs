@@ -12,7 +12,8 @@ class MazeSolverProgram:
 
     __mazeFilePath: str
 
-    def __init__(self, pathToMazeFile: str = None):
+    def __init__(self, h,  pathToMazeFile: str = None):
+        self.__h = h  # pick the given heiristic
         if (pathToMazeFile == None):
             __location__ = os.path.realpath(os.path.join(
                 os.getcwd(), os.path.dirname(__file__)))
@@ -67,7 +68,6 @@ class MazeSolverProgram:
     # print(self.h(state=self.startState))
 
     # Heuristic definition
-
     def __h1(self, state: pc.tile):
         return abs(state.x - self.__end_tile.x) + abs(state.y - self.__end_tile.y)
 

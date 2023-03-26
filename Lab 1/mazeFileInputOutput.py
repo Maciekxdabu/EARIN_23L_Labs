@@ -37,6 +37,8 @@ def saveMaze(filePath: str, maze):
 
 
 def getMazeSavePath(fileName: str) -> str:
+    mazesDirectory = 'mazes'
     maze_dir = os.path.realpath(os.path.join(
-        os.getcwd(), os.path.dirname(__file__)))
+        os.getcwd(), os.path.dirname(__file__),  mazesDirectory))
+
     return os.path.join(maze_dir, fileName)
