@@ -10,9 +10,6 @@ for package in installed_packages:
     try:
         package_dist = pkg_resources.get_distribution(package.key)
         if package_dist.has_metadata('RECORD'):
-            print(
-                f"{package.key} is not included in Python standard library or was not installed via pip.")
-            continue  # package was installed via pip
+            print(f"{package.key} was installed via pip.")
     except:
         pass
-   # print(f"{package.key} is included in Python standard library or was not installed via pip.")
