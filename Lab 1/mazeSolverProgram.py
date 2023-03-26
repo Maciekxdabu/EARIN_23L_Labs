@@ -278,5 +278,5 @@ class MazeSolverProgram:
         return [self.__solutionTime, self.__solutionSteps, self.__pathLength]
 
 
-p = MazeSolverProgram()
-p.run()
+# p = MazeSolverProgram()
+# p.run()

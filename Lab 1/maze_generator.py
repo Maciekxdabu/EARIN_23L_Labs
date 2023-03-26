@@ -61,7 +61,7 @@ def generate_maze(width, height, filePath: str):
     return maze
 
 
-maze = generate_maze(25, 25, "mazes/maze1.txt")
+# maze = generate_maze(25, 25, "mazes/maze1.txt")
 
 # gui.initConsole()
 # gui.printMazeWithFrame(maze=maze)
