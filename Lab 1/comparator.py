@@ -4,6 +4,7 @@ import mazeFileInputOutput
 import heuristics
 
 import numpy as np
+import pandas as pd
 
 
 def compare():
@@ -23,14 +24,21 @@ def compare():
                                                  pathToMazeFile=maze_file)
         results1 = p1.solve()
         results2 = p2.solve()
-        results.append([results1, results2])
+        results.append(results1 + results2)
         print(f"    So1/So2: {np.divide(results1,results2)}")
         print(f"    Solver1: {results1} ")
         print(f"    Solver2: {results2} ")
-        # TODO save results to xlsx
-        # a w excelu
         # por res1.stepNumber / res2StepNumber
         # res1.time / res2.time
+    
+    # Save results to xlsx
+    # Specify column names
+    column_names = ["Heuristic 1 Time", "Number of steps", "length of path", "Heuristic 2 Time", "Number of steps", "length of path"]
+    # create a DataFrame from the array
+    df = pd.DataFrame(results, columns=column_names)
+
+    # write the DataFrame to an Excel file
+    df.to_excel("output.xlsx", index=False)
 
 
 compare()
