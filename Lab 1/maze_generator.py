@@ -1,11 +1,12 @@
 import constants as c
 import gui
+import mazeFileInputOutput as fileIO
 
 import numpy as np
 import random
 
 
-def generate_maze(width, height):
+def generate_maze(width, height, filePath: str):
     # Initialize maze with empty space on every cell with odd coordinates
     maze = np.full((height, width), 'X')
     maze[1::2, 1::2] = ' '
@@ -53,11 +54,14 @@ def generate_maze(width, height):
     # set start and end positions in maze
     maze[start_y][start_x] = "S"
     maze[end_y][end_x] = "E"
+
+    # Save maze to provided file
+    fileIO.saveMaze(filePath, maze=maze)
     # Return maze
     return maze
 
 
-maze = generate_maze(25, 25)
+maze = generate_maze(25, 25, "mazes/maze1.txt")
 
 gui.initConsole()
 gui.printMazeWithFrame(maze=maze)
