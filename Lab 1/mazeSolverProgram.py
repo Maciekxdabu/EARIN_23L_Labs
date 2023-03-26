@@ -68,7 +68,7 @@ class MazeSolverProgram:
     # print(self.h(state=self.startState))
 
     # Heuristic definition
-    def __h1(self, state: pc.tile):
+    def __h(self, state: pc.tile):
         return abs(state.x - self.__end_tile.x) + abs(state.y - self.__end_tile.y)
 
     # ----- Stepping of the algorithm
@@ -116,7 +116,7 @@ class MazeSolverProgram:
         # main algorithm loop (runs as long as there are tiles to check)
         while len(frontier) > 0:
             # find the tile to check with the smallest heuristic value
-            checkedTile = min(frontier, key=self.__h1)
+            checkedTile = min(frontier, key=self.__h)
             # check if we reached the end of the maze
             if checkedTile == self.__end_tile:
                 newFrontiers.clear()
@@ -166,7 +166,7 @@ class MazeSolverProgram:
                         pathsMap[tile.y][tile.x].x = checkedTile.x
                         pathsMap[tile.y][tile.x].y = checkedTile.y
                 # also move up node present in frontier if its heuristic is better than the currently checked one
-                elif (self.__h1(tile) < self.__h1(checkedTile)):
+                elif (self.__h(tile) < self.__h(checkedTile)):
                     frontier.remove(tile)
                     frontier.append(tile)
                     newFrontiers.append(tile)
