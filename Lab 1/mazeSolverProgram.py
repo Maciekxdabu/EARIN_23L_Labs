@@ -68,8 +68,8 @@ class MazeSolverProgram:
     # print(self.h(state=self.startState))
 
     # Heuristic definition
-    def __h(self, state: pc.tile):
-        return abs(state.x - self.__end_tile.x) + abs(state.y - self.__end_tile.y)
+  #  def __h(self, state: pc.tile):
+   #     return abs(state.x - self.__end_tile.x) + abs(state.y - self.__end_tile.y)
 
     # ----- Stepping of the algorithm
 
@@ -114,9 +114,10 @@ class MazeSolverProgram:
             pathsMap.append(tempRow)
 
         # main algorithm loop (runs as long as there are tiles to check)
+        def appliedHeuristic(x): return self.__h(x, self.__end_tile)
         while len(frontier) > 0:
             # find the tile to check with the smallest heuristic value
-            checkedTile = min(frontier, key=self.__h)
+            checkedTile = min(frontier, key=appliedHeuristic)
             # check if we reached the end of the maze
             if checkedTile == self.__end_tile:
                 newFrontiers.clear()

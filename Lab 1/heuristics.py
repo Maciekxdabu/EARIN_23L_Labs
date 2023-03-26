@@ -1,9 +1,9 @@
 import program_classes as pc
 
 
-def h1(self, state: pc.tile):
-    return abs(state.x - self.__end_tile.x) + abs(state.y - self.__end_tile.y)
+def h1(examinedTile: pc.tile, endTile: pc.tile):
+    return abs(examinedTile.x - endTile.x) + abs(examinedTile.y - endTile.y)
 
 
-def h2(self, state: pc.tile):
-    return abs(state.x - self.__end_tile.x) ^ 2 + abs(state.y - self.__end_tile.y) ^ 24
+def h2(state: pc.tile, endTile: pc.tile):
+    return abs(state.x - endTile.x) ^ 2 + abs(state.y - endTile.y) ^ 24
