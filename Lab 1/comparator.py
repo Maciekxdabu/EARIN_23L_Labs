@@ -1,23 +1,33 @@
-import main
+import mazeSolverProgram
 import maze_generator
+import mazeFileInputOutput
 
 
 def compare():
+    mazeWidth = 25
+    mazeHeight = 25
     results = []
-    for x in range(100):
+    for x in range(2):
         # wrzucić do folderu a nie luzem
-        maze_file = "maze"+x+".txt"
-        maze_generator.generateMaze(maze_file)
-        p1 = main.MazeSolverProgram(
-            useSecondHeiristic=True, pathToMazeFile=maze_file)
-        p2 = main.MazeSolverProgram(
-            useSecondHeiristic=False, pathToMazeFile=maze_file)
-        results1 = p1.solve(maze_file)
-        results2 = p2.solve(maze_file)
+        mazeFileName = f"maze{x}.txt"
+        maze_file = mazeFileInputOutput.getMazeSavePath(mazeFileName)
+        maze_generator.generate_maze(mazeWidth, mazeHeight, maze_file)
+        p1 = mazeSolverProgram.MazeSolverProgram(
+            # useSecondHeiristic=True,
+            pathToMazeFile=maze_file)
+        p2 = mazeSolverProgram.MazeSolverProgram(
+            # useSecondHeiristic=False,
+            pathToMazeFile=maze_file)
+        results1 = p1.solve()
+        results2 = p2.solve()
         results.append([results1, results2])
 
         # TODO save results to xlsx
         # a w excelu
         # por res1.stepNumber / res2StepNumber
         # res1.time / res2.time
+
+        print(results)
+
+
 compare()

@@ -17,10 +17,11 @@ def loadMaze(filePath: str) -> np.array:
 
     return finalMaze
 
+
 def saveMaze(filePath: str, maze):
     # Get the directory path
     dir_path = os.path.dirname(filePath)
-    
+
     # Create the directory if it doesn't exist
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
@@ -33,3 +34,9 @@ def saveMaze(filePath: str, maze):
     # Write maze string to file (since we open file using "with" it closes the file correctly when it ends)
     with open(filePath, "w") as f:
         f.write(maze_str)
+
+
+def getMazeSavePath(fileName: str) -> str:
+    maze_dir = os.path.realpath(os.path.join(
+        os.getcwd(), os.path.dirname(__file__)))
+    return os.path.join(maze_dir, fileName)

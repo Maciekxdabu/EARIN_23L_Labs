@@ -16,7 +16,9 @@ class MazeSolverProgram:
         if (pathToMazeFile == None):
             __location__ = os.path.realpath(os.path.join(
                 os.getcwd(), os.path.dirname(__file__)))
-            self.__mazeFilePath = os.path.join(__location__, "maze.txt")
+            self.__mazeFilePath = os.path.join(__location__, "maze0.txt")
+        else:
+            self.__mazeFilePath = pathToMazeFile
         self.__clearStepsAndPath()
 
     def __clearStepsAndPath(self):
@@ -131,7 +133,6 @@ class MazeSolverProgram:
                 for tile in finalPath:
                     # add tile to the drawing system
                     self.__addNewPathToTile(tile)
-                self.__prerenderSolvedMaze()
                 break
 
             # move current tile from frontier to explored
@@ -227,13 +228,13 @@ class MazeSolverProgram:
     def run(self):
         gui.initConsole()
         # load unsolved maze from file
-        self.__maze = mfio.loadMaze(self.__mazeFilePath)
-        self.__locateStartAndEndTiles()
+        self.loadMazeFile()
 
         # solve the maze (generating steps)
         self.__solveMazeWithMeasurements()
 
         # start with showing unsolved maze
+        self.__prerenderSolvedMaze()
         self.__displayUnsolvedMaze()
 
         while True:
@@ -263,6 +264,18 @@ class MazeSolverProgram:
                     self.__drawing_path = False
                     continue
                 self.__calculateNextDisplayedState()
+
+    def loadMazeFile(self):
+        self.__maze = mfio.loadMaze(self.__mazeFilePath)
+        self.__locateStartAndEndTiles()
+
+    # solve the maze and return solution statistics
+    def solve(self):
+        # load unsolved maze from file
+        self.loadMazeFile()
+        # solve the maze (generating steps)
+        self.__solveMazeWithMeasurements()
+        return [self.__solutionTime, self.__solutionSteps, self.__pathLength]
 
 
 p = MazeSolverProgram()
