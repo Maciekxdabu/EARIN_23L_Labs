@@ -33,7 +33,7 @@ def saveMaze(filePath: str, maze):
 
     # Write maze string to file (since we open file using "with" it closes the file correctly when it ends)
     with open(filePath, "w") as f:
-        f.write(maze_str)
+        f.write(maze_str[:-1])
 
 
 def getMazeSavePath(fileName: str) -> str:
