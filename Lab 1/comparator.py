@@ -8,7 +8,7 @@ def compare():
     mazeWidth = 25
     mazeHeight = 25
     results = []
-    for x in range(2):
+    for x in range(100):
         # wrzucić do folderu a nie luzem
         mazeFileName = f"maze{x}.txt"
         maze_file = mazeFileInputOutput.getMazeSavePath(mazeFileName)
