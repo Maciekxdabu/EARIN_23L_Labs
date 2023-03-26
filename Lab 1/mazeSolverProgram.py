@@ -60,19 +60,10 @@ class MazeSolverProgram:
         self.__start_tile: pc.tile = pc.tile(
             self.start_tile_np_arr[0][0], self.start_tile_np_arr[0][1])
 
-    # start_tile_np_arr: np.ndarray[np.intp]
-    # end_tile_np_arr: np.ndarray[np.intp]
     __end_tile: pc.tile
     __start_tile: pc.tile
-    # TEMP idk what this is for but ok
-    # print(self.h(state=self.startState))
-
-    # Heuristic definition
-  #  def __h(self, state: pc.tile):
-   #     return abs(state.x - self.__end_tile.x) + abs(state.y - self.__end_tile.y)
 
     # ----- Stepping of the algorithm
-
     # array containing steps
     __steps: list[pc.step] = []
     # keep track which step's outcome is displayed
@@ -167,7 +158,7 @@ class MazeSolverProgram:
                         pathsMap[tile.y][tile.x].x = checkedTile.x
                         pathsMap[tile.y][tile.x].y = checkedTile.y
                 # also move up node present in frontier if its heuristic is better than the currently checked one
-                elif (self.__h(tile) < self.__h(checkedTile)):
+                elif (appliedHeuristic(tile) < appliedHeuristic(checkedTile)):
                     frontier.remove(tile)
                     frontier.append(tile)
                     newFrontiers.append(tile)

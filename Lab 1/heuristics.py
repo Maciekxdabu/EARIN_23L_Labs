@@ -6,4 +6,4 @@ def h1(examinedTile: pc.tile, endTile: pc.tile):
 
 
 def h2(state: pc.tile, endTile: pc.tile):
-    return abs(state.x - endTile.x) ^ 2 + abs(state.y - endTile.y) ^ 24
+    return abs(state.x - endTile.x) ^ 2 + abs(state.y - endTile.y) ^ 2

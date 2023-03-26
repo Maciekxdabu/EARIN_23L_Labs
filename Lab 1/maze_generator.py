@@ -35,25 +35,14 @@ def generate_maze(width, height, filePath: str):
             set1.update(set2)
             sets.remove(set2)
             maze[x][y] = ' '
-    # Randomize start and end positions
-    quadrant_start = random.choice([(0, 0), (0, 1), (1, 0), (1, 1)])
-    quadrant_end = random.choice([(0, 0), (0, 1), (1, 0), (1, 1)])
-    while quadrant_end == quadrant_start:
-        quadrant_end = random.choice([(0, 0), (0, 1), (1, 0), (1, 1)])
-
-    # choose random odd coordinates for start and end positions in the chosen quadrants
-    start_x = random.randrange(
-        quadrant_start[0] * width // 2 + 1, (quadrant_start[0] + 1) * width // 2, 2)
-    start_y = random.randrange(
-        quadrant_start[1] * height // 2 + 1, (quadrant_start[1] + 1) * height // 2, 2)
-    end_x = random.randrange(
-        quadrant_end[0] * width // 2 + 1, (quadrant_end[0] + 1) * width // 2, 2)
-    end_y = random.randrange(
-        quadrant_end[1] * height // 2 + 1, (quadrant_end[1] + 1) * height // 2, 2)
-
     # set start and end positions in maze
-    maze[start_y][start_x] = "S"
-    maze[end_y][end_x] = "E"
+    startWidth = __makeEven(width // 4)  # - width % 4
+    startHeight = __makeEven(height // 4)  # - height % 4
+
+    endWidth = __makeEven(width // 2 + width // 4)  # - width % 4
+    endHeight = __makeEven(height // 2 + height // 4)  # - height % 4
+    maze[startHeight][startWidth] = "S"
+    maze[endHeight][endWidth] = "E"
 
     # Save maze to provided file
     fileIO.saveMaze(filePath, maze=maze)
@@ -61,7 +50,7 @@ def generate_maze(width, height, filePath: str):
     return maze
 
 
-# maze = generate_maze(25, 25, "mazes/maze1.txt")
-
-# gui.initConsole()
-# gui.printMazeWithFrame(maze=maze)
+def __makeEven(x: int):
+    if x % 2 == 0:
+        x = x + 1
+    return x

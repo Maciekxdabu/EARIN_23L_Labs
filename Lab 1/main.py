@@ -2,7 +2,7 @@ import mazeSolverProgram
 import mazeFileInputOutput
 import heuristics
 
-mazeFileName = "maze78.txt"
+mazeFileName = "maze96.txt"
 mazeFilePath = mazeFileInputOutput.getMazeSavePath(mazeFileName)
 
 p = mazeSolverProgram.MazeSolverProgram(heuristics.h2, mazeFilePath)
