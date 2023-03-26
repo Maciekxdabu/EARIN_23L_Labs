@@ -8,10 +8,10 @@ import pandas as pd
 
 
 def compare():
-    mazeWidth = 47
-    mazeHeight = 47
+    mazeWidth = 101
+    mazeHeight = 101
     results = []
-    mazeCount = 100
+    mazeCount = 1000
     for x in range(mazeCount):
         print(f"Comparing maze {x+1}/{mazeCount}")
         # wrzucić do folderu a nie luzem
@@ -30,10 +30,11 @@ def compare():
         print(f"    Solver2: {results2} ")
         # por res1.stepNumber / res2StepNumber
         # res1.time / res2.time
-    
+
     # Save results to xlsx
     # Specify column names
-    column_names = ["Heuristic 1 Time", "Number of steps", "length of path", "Heuristic 2 Time", "Number of steps", "length of path"]
+    column_names = ["Heuristic 1 Time", "Number of steps", "length of path",
+                    "Heuristic 2 Time", "Number of steps", "length of path"]
     # create a DataFrame from the array
     df = pd.DataFrame(results, columns=column_names)
 
