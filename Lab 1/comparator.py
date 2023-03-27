@@ -8,8 +8,8 @@ import pandas as pd
 
 
 def compare():
-    maze_width = 15
-    maze_height = 15
+    maze_width = 101
+    maze_height = 101
     results = []
     maze_count = 1000
     for x in range(maze_count):
