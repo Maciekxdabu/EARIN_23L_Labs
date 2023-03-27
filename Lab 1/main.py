@@ -1,9 +1,9 @@
-import mazeSolverProgram
-import mazeFileInputOutput
+import maze_solver_program
+import maze_file_input_output
 import heuristics
 
 mazeFileName = "maze96.txt"
-mazeFilePath = mazeFileInputOutput.getMazeSavePath(mazeFileName)
+mazeFilePath = maze_file_input_output.getMazeSavePath(mazeFileName)
 
-p = mazeSolverProgram.MazeSolverProgram(heuristics.h2, mazeFilePath)
+p = maze_solver_program.MazeSolverProgram(heuristics.h2, mazeFilePath)
 p.run()

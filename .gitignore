@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+*/mazes/
+*/mazes51x51_100/

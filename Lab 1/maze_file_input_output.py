@@ -18,7 +18,7 @@ def loadMaze(filePath: str) -> np.array:
     return finalMaze
 
 
-def saveMaze(filePath: str, maze):
+def save_maze(filePath: str, maze):
     # Get the directory path
     dir_path = os.path.dirname(filePath)
 

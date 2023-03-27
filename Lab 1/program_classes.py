@@ -1,11 +1,11 @@
-class tile:
+class Tile:
     x: int = -1
     y: int = -1
 
     def __init__(self, y, x):
         self.x = x
         self.y = y
-    
+
     # the tile is the same tile in the maze if they have the same coordinates
     def __eq__(self, __o: object) -> bool:
         return self.x == __o.x and self.y == __o.y
@@ -15,9 +15,9 @@ class tile:
 
 
 class step:
-    evaluatedTile: tile
-    newFrontierTiles: list[tile]
+    evaluatedTile: Tile
+    newFrontierTiles: list[Tile]
 
-    def __init__(self, evaluatedTile: tile, newFrontierTiles: list[tile]):
+    def __init__(self, evaluatedTile: Tile, newFrontierTiles: list[Tile]):
         self.evaluatedTile = evaluatedTile
         self.newFrontierTiles = newFrontierTiles
