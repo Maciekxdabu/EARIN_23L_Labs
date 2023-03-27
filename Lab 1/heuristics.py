@@ -1,9 +1,12 @@
 import program_classes as pc
+import math
 
 
 def h1(examinedTile: pc.Tile, endTile: pc.Tile):
-    return abs(examinedTile.x - endTile.x) + abs(examinedTile.y - endTile.y)
+    examinedTile.h = abs(examinedTile.x - endTile.x) + abs(examinedTile.y - endTile.y)
+    return examinedTile.h
 
 
 def h2(state: pc.Tile, endTile: pc.Tile):
-    return abs(state.x - endTile.x) ^ 2 + abs(state.y - endTile.y) ^ 2
+    state.h = math.sqrt(pow(abs(state.x - endTile.x),2) + pow(abs(state.y - endTile.y),2))
+    return state.h

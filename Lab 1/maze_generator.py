@@ -54,3 +54,5 @@ def __make_even(x: int):
     if x % 2 == 0:
         x = x + 1
     return x
+
+generate_maze(21,21,"Lab 1/mazes/mazeTest.txt")

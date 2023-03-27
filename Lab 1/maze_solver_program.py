@@ -105,10 +105,9 @@ class MazeSolverProgram:
             paths_map.append(temp_row)
 
         # main algorithm loop (runs as long as there are tiles to check)
-        def applied_heuristic(x): return self.__h(x, self.__end_tile)
         while len(frontier) > 0:
             # find the tile to check with the smallest heuristic value
-            checked_tile = min(frontier, key=applied_heuristic)
+            checked_tile = min(frontier, key=lambda x: x.h)
             # check if we reached the end of the maze
             if checked_tile == self.__end_tile:
                 new_frontiers.clear()
@@ -150,6 +149,8 @@ class MazeSolverProgram:
 
             # check neighboring tiles
             for tile in neighbors:
+                # calculate heuristic and save it to tile
+                self.__h(tile, self.__end_tile)
                 # add tile to frontier if it was not in there already and if it has not been explored
                 if (tile not in frontier):
                     if (tile not in explored):
@@ -158,7 +159,7 @@ class MazeSolverProgram:
                         paths_map[tile.y][tile.x].x = checked_tile.x
                         paths_map[tile.y][tile.x].y = checked_tile.y
                 # also move up node present in frontier if its heuristic is better than the currently checked one
-                elif (applied_heuristic(tile) < applied_heuristic(checked_tile)):
+                elif (tile.h < checked_tile.h):
                     frontier.remove(tile)
                     frontier.append(tile)
                     new_frontiers.append(tile)

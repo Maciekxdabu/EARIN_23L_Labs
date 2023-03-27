@@ -1,10 +1,14 @@
+import math
+
 class Tile:
     x: int = -1
     y: int = -1
+    h: int = math.inf
 
-    def __init__(self, y, x):
+    def __init__(self, y, x, h=math.inf):
         self.x = x
         self.y = y
+        self.h = h
 
     # the tile is the same tile in the maze if they have the same coordinates
     def __eq__(self, __o: object) -> bool:
