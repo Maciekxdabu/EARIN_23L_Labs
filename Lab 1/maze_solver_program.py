@@ -12,7 +12,7 @@ class MazeSolverProgram:
 
     __maze_file_path: str
 
-    def __init__(self, h,  path_to_maze_file: str = None):
+    def __init__(self, h,  path_to_maze_file: str = None, display_step_size=1):
         self.__h = h  # pick the given heuristic
         if (path_to_maze_file == None):
             __location__ = os.path.realpath(os.path.join(
@@ -21,6 +21,7 @@ class MazeSolverProgram:
         else:
             self.__maze_file_path = path_to_maze_file
         self.__clear_steps_and_path()
+        self.__display_step_size = display_step_size
 
     def __clear_steps_and_path(self):
         self.__path.clear()
@@ -68,6 +69,7 @@ class MazeSolverProgram:
     __steps: list[pc.step] = []
     # keep track which step's outcome is displayed
     __current_step: int
+    __display_step_size: int = 1
     # array containing path
     __path: list[pc.Tile] = []
     # current path tile (displayed by gui)
@@ -201,19 +203,28 @@ class MazeSolverProgram:
         self.__displayed_maze = np.array(self.__solved_maze)
 
     def __calculate_next_displayed_state(self):
-        if not self.__drawing_path:
-            step = self.__steps[self.__current_step]
-            self.__displayed_maze = gui.apply_search_step_to_maze(
-                self.__displayed_maze, step)
-            self.__current_step += 1
-            sleep(0.1)
+        for x in range(self.__display_step_size):
+            if (not self.__drawing_path and self.__current_step >= len(self.__steps)):
+                self.__drawing_path = True
+                break
+            if (self.__drawing_path and self.__current_path_tile >= len(self.__path)):
+                self.__playing_forwards = False
+                self.__drawing_path = False
+                break
 
-        else:
-            path_tile = self.__path[self.__current_path_tile]
-            self.__displayed_maze = gui.apply_path_marking_to_maze(
-                self.__displayed_maze, path_tile)
-            self.__current_path_tile += 1
-            sleep(0.05)
+            if not self.__drawing_path:
+                step = self.__steps[self.__current_step]
+                self.__displayed_maze = gui.apply_search_step_to_maze(
+                    self.__displayed_maze, step)
+                self.__current_step += 1
+
+            else:  # draw path in one step
+                for y in range(self.__path_length):
+                    path_tile = self.__path[self.__current_path_tile]
+                    self.__displayed_maze = gui.apply_path_marking_to_maze(
+                        self.__displayed_maze, path_tile)
+                    self.__current_path_tile += 1
+        sleep(0.1)
 
     # main function
 
@@ -249,12 +260,6 @@ class MazeSolverProgram:
                         self.__drawing_path = False
 
             else:
-                if (not self.__drawing_path and self.__current_step >= len(self.__steps)):
-                    self.__drawing_path = True
-                if (self.__drawing_path and self.__current_path_tile >= len(self.__path)):
-                    self.__playing_forwards = False
-                    self.__drawing_path = False
-                    continue
                 self.__calculate_next_displayed_state()
 
     def load_maze_file(self):
