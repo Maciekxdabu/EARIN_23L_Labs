@@ -3,7 +3,7 @@ import maze_file_input_output
 import heuristics
 
 mazeFileName = "maze1.txt"
-mazeFilePath = maze_file_input_output.getMazeSavePath(mazeFileName)
+mazeFilePath = maze_file_input_output.get_maze_save_path(mazeFileName)
 displayStepSize = 1
 
 p = maze_solver_program.MazeSolverProgram(

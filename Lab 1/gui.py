@@ -44,11 +44,11 @@ def console_get_option_int() -> str:
     return test
 
 
-def apply_search_step_to_maze(maze: numpy.array, step: pc.step):
+def apply_search_step_to_maze(maze: numpy.array, step: pc.Step):
     # TEMP do not overwrite the start or end of tile path
-    if (not (maze[step.evaluatedTile.y][step.evaluatedTile.x] == c.MAZE_START or maze[step.evaluatedTile.y][step.evaluatedTile.x] == c.MAZE_END)):
-        maze[step.evaluatedTile.y][step.evaluatedTile.x] = c.ALG_EXPLORED
-    for new_frontier in step.newFrontierTiles:
+    if (not (maze[step.evaluated_tile.y][step.evaluated_tile.x] == c.MAZE_START or maze[step.evaluated_tile.y][step.evaluated_tile.x] == c.MAZE_END)):
+        maze[step.evaluated_tile.y][step.evaluated_tile.x] = c.ALG_EXPLORED
+    for new_frontier in step.new_frontier_tiles:
         # TEMP do not overwrite the start or end tile path
         if (not (maze[new_frontier.y][new_frontier.x] == c.MAZE_START or maze[new_frontier.y][new_frontier.x] == c.MAZE_END)):
             maze[new_frontier.y][new_frontier.x] = c.ALG_FRONTIER

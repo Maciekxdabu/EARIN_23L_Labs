@@ -2,20 +2,20 @@ import os
 import numpy as np
 
 
-def loadMaze(filePath: str) -> np.array:
-    mazeFile = loadedMaze = open(filePath, "r")
-    loadedMaze = mazeFile.read()
-    mazeFile.close()
-    loadedMaze = loadedMaze.split("\n")
-    listOfLists = []
+def load_maze(file_path: str) -> np.array:
+    maze_file = loaded_maze = open(file_path, "r")
+    loaded_maze = maze_file.read()
+    maze_file.close()
+    loaded_maze = loaded_maze.split("\n")
+    list_of_lists = []
 
-    for x in loadedMaze:
+    for x in loaded_maze:
         # split the line into single character elements
-        listOfLists.append(list(x))
+        list_of_lists.append(list(x))
 
-    finalMaze = np.array(listOfLists)
+    final_maze = np.array(list_of_lists)
 
-    return finalMaze
+    return final_maze
 
 
 def save_maze(filePath: str, maze):
@@ -36,9 +36,9 @@ def save_maze(filePath: str, maze):
         f.write(maze_str[:-1])
 
 
-def getMazeSavePath(fileName: str) -> str:
-    mazesDirectory = 'mazes'
+def get_maze_save_path(file_name: str) -> str:
+    mazes_directory = 'mazes'
     maze_dir = os.path.realpath(os.path.join(
-        os.getcwd(), os.path.dirname(__file__),  mazesDirectory))
+        os.getcwd(), os.path.dirname(__file__),  mazes_directory))
 
-    return os.path.join(maze_dir, fileName)
+    return os.path.join(maze_dir, file_name)

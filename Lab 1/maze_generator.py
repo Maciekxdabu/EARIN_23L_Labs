@@ -36,13 +36,13 @@ def generate_maze(width, height, file_path: str):
             sets.remove(set2)
             maze[x][y] = ' '
     # set start and end positions in maze
-    startWidth = __make_even(width // 4)  # - width % 4
-    startHeight = __make_even(height // 4)  # - height % 4
+    start_width = __make_even(width // 4)  # - width % 4
+    start_height = __make_even(height // 4)  # - height % 4
 
-    endWidth = __make_even(width // 2 + width // 4)  # - width % 4
-    endHeight = __make_even(height // 2 + height // 4)  # - height % 4
-    maze[startHeight][startWidth] = "S"
-    maze[endHeight][endWidth] = "E"
+    end_width = __make_even(width // 2 + width // 4)  # - width % 4
+    end_height = __make_even(height // 2 + height // 4)  # - height % 4
+    maze[start_height][start_width] = "S"
+    maze[end_height][end_width] = "E"
 
     # Save maze to provided file
     fileIO.save_maze(file_path, maze=maze)

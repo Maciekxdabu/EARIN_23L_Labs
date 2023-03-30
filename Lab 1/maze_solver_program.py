@@ -66,7 +66,7 @@ class MazeSolverProgram:
 
     # ----- Stepping of the algorithm
     # array containing steps
-    __steps: list[pc.step] = []
+    __steps: list[pc.Step] = []
     # keep track which step's outcome is displayed
     __current_step: int
     __display_step_size: int = 1
@@ -187,7 +187,7 @@ class MazeSolverProgram:
 
     # function to add new steps
     def __add_new_step(self, current_tile: pc.Tile, new_states: list[pc.Tile]):
-        self.__steps.append(pc.step(current_tile, new_states))
+        self.__steps.append(pc.Step(current_tile, new_states))
 
     # function to add new path to tile
     def __add_new_path_to_tile(self, tileToAdd: pc.Tile):
@@ -263,7 +263,7 @@ class MazeSolverProgram:
                 self.__calculate_next_displayed_state()
 
     def load_maze_file(self):
-        self.__maze = mfio.loadMaze(self.__maze_file_path)
+        self.__maze = mfio.load_maze(self.__maze_file_path)
         self.__locate_start_and_end_tiles()
 
     # solve the maze and return solution statistics

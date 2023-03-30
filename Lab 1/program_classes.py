@@ -14,10 +14,10 @@ class Tile:
         return f"x:{self.x}-y:{self.y}"
 
 
-class step:
-    evaluatedTile: Tile
-    newFrontierTiles: list[Tile]
+class Step:
+    evaluated_tile: Tile
+    new_frontier_tiles: list[Tile]
 
-    def __init__(self, evaluatedTile: Tile, newFrontierTiles: list[Tile]):
-        self.evaluatedTile = evaluatedTile
-        self.newFrontierTiles = newFrontierTiles
+    def __init__(self, evaluated_tile: Tile, new_frontier_tiles: list[Tile]):
+        self.evaluated_tile = evaluated_tile
+        self.new_frontier_tiles = new_frontier_tiles

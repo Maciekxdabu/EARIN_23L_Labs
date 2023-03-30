@@ -15,7 +15,7 @@ def compare():
     for x in range(maze_count):
         print(f"Comparing maze {x+1}/{maze_count}")
         maze_file_name = f"maze{x}.txt"
-        maze_file = maze_file_input_output.getMazeSavePath(maze_file_name)
+        maze_file = maze_file_input_output.get_maze_save_path(maze_file_name)
         maze_generator.generate_maze(maze_width, maze_height, maze_file)
         p1 = maze_solver_program.MazeSolverProgram(heuristics.h1,
                                                    path_to_maze_file=maze_file)
