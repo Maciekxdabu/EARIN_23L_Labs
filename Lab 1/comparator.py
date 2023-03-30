@@ -8,10 +8,11 @@ import pandas as pd
 
 
 def compare():
+    # Configure values
     maze_width = 101
     maze_height = 101
     maze_count = 1000
-    
+
     results = []
     for x in range(maze_count):
         print(f"Comparing maze {x+1}/{maze_count}")
