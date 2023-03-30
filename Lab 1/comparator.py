@@ -8,10 +8,13 @@ import pandas as pd
 
 
 def compare():
-    # Configure values
+    # START Config
+    # dimensions of the mazes to solve
     maze_width = 101
     maze_height = 101
+    # how many mazes to solve and get results of
     maze_count = 1000
+    # END config
 
     results = []
     for x in range(maze_count):
