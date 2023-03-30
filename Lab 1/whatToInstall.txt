@@ -1,0 +1,5 @@
+# run these commands before running main.py or comparator.py
+pip install numpy
+pip install colorama
+pip install pandas
+pip install openpyxl
