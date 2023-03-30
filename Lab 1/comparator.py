@@ -10,8 +10,9 @@ import pandas as pd
 def compare():
     maze_width = 101
     maze_height = 101
-    results = []
     maze_count = 1000
+    
+    results = []
     for x in range(maze_count):
         print(f"Comparing maze {x+1}/{maze_count}")
         maze_file_name = f"maze{x}.txt"
